@@ -1,0 +1,12 @@
+wp-config.php
+.env
+wp-content/uploads/
+wp-content/cache/
+wp-content/upgrade/
+wp-content/plugins/
+!wp-content/plugins/purplease-*/
+*.sql
+*.zip
+*.log
+.DS_Store
+node_modules/
