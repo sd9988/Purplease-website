@@ -5,7 +5,7 @@ Revamp of [purplease.com](https://purplease.com), a WordPress site running the A
 ## Layout
 
 ```
-docs/                     audit, plan and screenshots
+docs/                     audit (full-audit-2026-10-28.md), plan and screenshots
 wp-content/themes/        Astra child theme (add once exported from the live site)
 ```
 
