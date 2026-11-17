@@ -25,11 +25,13 @@ button,input,select{font:inherit;color:inherit}
 .num{font-variant-numeric:tabular-nums}
 
 header.top{background:var(--surface);border-bottom:1px solid var(--line);padding-block:44px 36px}
-.top .wrap{display:flex;flex-wrap:wrap;gap:20px 40px;align-items:flex-end;justify-content:space-between}
+.top .wrap{display:flex;flex-wrap:wrap;gap:28px 48px;align-items:center;justify-content:space-between}
 .brand{display:flex;align-items:center;gap:10px;font-weight:700;color:var(--ink);font-size:17px;margin-bottom:18px}
 .top h1{font-size:clamp(28px,4vw,42px);line-height:1.12;letter-spacing:-.02em}
 .top p{margin:10px 0 0;color:var(--muted);max-width:620px;font-size:16px}
-.stats{display:flex;gap:28px;flex-wrap:wrap}
+.stats{display:flex;gap:28px;flex-wrap:wrap;margin-top:22px}
+.heroimg{flex:1 1 360px;min-width:0;max-width:100%;height:260px;object-fit:cover;border-radius:16px;display:block}
+.intro{flex:1 1 520px;min-width:0}
 .stat b{display:block;font-size:24px;color:var(--ink)}
 .stat span{font-size:13px;color:var(--muted)}
 
@@ -99,16 +101,17 @@ aside .hint{color:var(--muted);font-size:13px;margin:6px 0 14px}
 
 <header class="top gut">
   <div class="wrap">
-    <div>
+    <div class="intro">
       <div class="brand"><svg width="26" height="26" viewBox="0 0 28 28" aria-hidden="true"><rect width="28" height="28" rx="7" fill="#4B2BB8"/><path d="M9 7h5.5l7 7-7 7H9l7-7z" fill="#FFFFFF"/></svg>Purplease</div>
       <h1>Engineering rate card</h1>
       <p>Billing rates for developers, engineers, designers and delivery roles, by tech stack and experience. Pick your location and billing, then click any rate to build a team estimate.</p>
-    </div>
     <div class="stats">
       <div class="stat"><b class="num" id="sRoles">78</b><span>roles &amp; stacks</span></div>
       <div class="stat"><b class="num" id="sCats">16</b><span>categories</span></div>
       <div class="stat"><b class="num" id="sFrom">—</b><span id="sFromLbl">starting rate</span></div>
     </div>
+    </div>
+    <img class="heroimg" src="team-engineers.jpg" alt="Two engineers reviewing code together on a laptop">
   </div>
 </header>
 
