@@ -1,7 +1,8 @@
 """Rebuild index.html from the rate card spreadsheet.
 
 Usage: python3 build.py path/to/Resource_Rate_Card_by_Tech_Stack.xlsx
-Only the four client-facing sheets are read; costs, margins and stack premiums stay out of the page.
+Only the two outside-India sheets are read (remote and onsite). Indian rates, costs, margins
+and stack premiums stay out of the page.
 """
 import json
 import sys
@@ -10,10 +11,8 @@ from pathlib import Path
 import openpyxl
 
 SHEETS = {
-    "indiaUsdHr": ("Indian – USD per hr", 2),
-    "indiaInrMonth": ("Indian – INR per month", 2),
-    "overseasUsdHr": ("Overseas – USD per hr", 1),
-    "onshoreUsdHr": ("Onshore – USD per hr", 1),
+    "remote": ("Overseas – USD per hr", 1),
+    "onsite": ("Onshore – USD per hr", 1),
 }
 SKIP = ("Category", "Notes", "•", "RATE", "Hourly", "Monthly")
 
@@ -30,7 +29,7 @@ def read_sheet(ws, step):
 def main(xlsx):
     wb = openpyxl.load_workbook(xlsx, data_only=True)
     sheets = {k: read_sheet(wb[name], step) for k, (name, step) in SHEETS.items()}
-    stacks = [[c, s] for c, s, _ in sheets["overseasUsdHr"]]
+    stacks = [[c, s] for c, s, _ in sheets["remote"]]
     for k, rows in sheets.items():
         if [[c, s] for c, s, _ in rows] != stacks:
             sys.exit(f"Sheet {SHEETS[k][0]} lists different roles from the overseas sheet")
