@@ -1,0 +1,409 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Purplease rates by tech stack and experience, with a team cost calculator for weekly, monthly and project pricing.">
+<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
+<title>Purplease Rate Card</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: header with photo, then the team planner (form + live quote side by side, stacked on phones), then the full rate table. */
+:root{
+  --bg:#FFFFFF; --surface:#F7F6FC; --panel:#FFFFFF; --line:#E6E3F0; --ink:#120E2C; --text:#2B2840; --muted:#5F5A73;
+  --accent:#4B2BB8; --accent-ink:#FFFFFF; --accent-soft:#F1EDFC; --accent-hover:#36208A; --focus:#8E74F0; --warn:#B4351F;
+  --quote-bg:#120E2C; --quote-ink:#FFFFFF; --quote-muted:#B9B3D1; --quote-line:#2A2448;
+  --font:'Plus Jakarta Sans',system-ui,-apple-system,'Segoe UI',sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0F0C22; --surface:#16122E; --panel:#1A1536; --line:#2C2650; --ink:#F3F1FA; --text:#D9D5E8; --muted:#A7A1BF;
+  --accent:#9C85FF; --accent-ink:#120E2C; --accent-soft:#272052; --accent-hover:#B7A6FF; --focus:#B7A6FF; --warn:#FF8C73;
+  --quote-bg:#241D4A; --quote-ink:#FFFFFF; --quote-muted:#C4BDE0; --quote-line:#3A3266; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0F0C22; --surface:#16122E; --panel:#1A1536; --line:#2C2650; --ink:#F3F1FA; --text:#D9D5E8; --muted:#A7A1BF;
+  --accent:#9C85FF; --accent-ink:#120E2C; --accent-soft:#272052; --accent-hover:#B7A6FF; --focus:#B7A6FF; --warn:#FF8C73;
+  --quote-bg:#241D4A; --quote-ink:#FFFFFF; --quote-muted:#C4BDE0; --quote-line:#3A3266; color-scheme:dark}
+[hidden]{display:none!important}
+body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:15px;line-height:1.55}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+.gut{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:1240px;margin:0 auto}
+h1,h2,h3{color:var(--ink);text-wrap:balance;margin:0}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.num{font-variant-numeric:tabular-nums}
+
+header.top{background:var(--surface);border-bottom:1px solid var(--line);padding-block:40px}
+.top .wrap{display:flex;flex-wrap:wrap;gap:28px 48px;align-items:center;justify-content:space-between}
+.intro{flex:1 1 520px;min-width:0}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;color:var(--ink);font-size:17px;margin-bottom:18px}
+.top h1{font-size:clamp(28px,4vw,42px);line-height:1.12;letter-spacing:-.02em}
+.top p{margin:10px 0 0;color:var(--muted);max-width:620px;font-size:16px}
+.stats{display:flex;gap:28px;flex-wrap:wrap;margin-top:22px}
+.stat b{display:block;font-size:24px;color:var(--ink)}
+.stat span{font-size:13px;color:var(--muted)}
+.heroimg{flex:1 1 360px;min-width:0;max-width:100%;height:260px;object-fit:cover;border-radius:16px;display:block}
+
+section.block{padding-block:48px 8px}
+.sechead{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:12px 24px;margin-bottom:20px}
+.sechead h2{font-size:clamp(22px,2.6vw,30px);letter-spacing:-.015em}
+.sechead p{margin:6px 0 0;color:var(--muted);max-width:640px}
+.planner{display:flex;flex-wrap:wrap;gap:28px;align-items:flex-start}
+.form{flex:999 1 640px;min-width:0;display:flex;flex-direction:column;gap:20px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px;box-sizing:border-box}
+.card h3{font-size:16px;margin-bottom:14px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px 16px}
+.f{display:flex;flex-direction:column;gap:6px;min-width:0}
+.f label,.lbl{font-size:13px;font-weight:600;color:var(--ink)}
+.f .opt{font-weight:400;color:var(--muted)}
+.input{min-height:44px;border:1px solid var(--line);border-radius:10px;background:var(--panel);padding:0 12px;box-sizing:border-box;width:100%;min-width:0}
+.input[aria-invalid="true"]{border-color:var(--warn)}
+.err{font-size:12px;color:var(--warn)}
+
+.members{display:flex;flex-direction:column;gap:12px;margin:0;padding:0;list-style:none}
+.member{border:1px solid var(--line);border-radius:12px;padding:14px;display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px 12px;align-items:end;background:var(--surface)}
+.member .role{grid-column:1/-1}
+.member .cost{grid-column:1/-1;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:6px 16px;font-size:13px;color:var(--muted);border-top:1px dashed var(--line);padding-top:10px}
+.member .cost b{color:var(--ink)}
+.qty{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:10px;background:var(--panel);min-height:44px}
+.qty button{border:0;background:transparent;width:40px;height:42px;cursor:pointer;font-size:18px;color:var(--ink)}
+.qty input{width:44px;border:0;background:transparent;text-align:center;min-height:42px}
+.rm{border:0;background:transparent;color:var(--muted);text-decoration:underline;cursor:pointer;padding:6px 0}
+.quick{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.chip{border:1px solid var(--line);background:var(--panel);border-radius:999px;min-height:36px;padding:0 14px;cursor:pointer;font-size:14px;color:var(--text);white-space:nowrap}
+.chip:hover{border-color:var(--accent);color:var(--accent)}
+.chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:46px;padding:0 18px;border-radius:10px;border:0;background:var(--accent);color:var(--accent-ink);font-weight:600;cursor:pointer}
+.btn:hover{background:var(--accent-hover)}
+.btn.ghost{background:transparent;color:var(--text);border:1px solid var(--line)}
+.btn.ghost:hover{background:var(--accent-soft)}
+.note{font-size:13px;color:var(--muted)}
+
+.quote{flex:1 1 340px;position:sticky;top:calc(env(safe-area-inset-top,0px) + 16px);background:var(--quote-bg);color:var(--quote-muted);border-radius:16px;padding:24px;box-sizing:border-box}
+.quote h3{color:var(--quote-ink);font-size:13px;font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+.quote .who{margin-top:10px;color:var(--quote-ink);font-size:20px;font-weight:700;line-height:1.3;overflow-wrap:anywhere}
+.quote .who span{display:block;font-size:14px;font-weight:500;color:var(--quote-muted)}
+.qrow{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid var(--quote-line)}
+.qrow b{color:var(--quote-ink)}
+.big{font-size:30px;font-weight:700;color:var(--quote-ink);letter-spacing:-.01em}
+.qlist{margin:14px 0 4px;padding:0;list-style:none;font-size:13px;display:flex;flex-direction:column;gap:6px}
+.qlist li{display:flex;justify-content:space-between;gap:10px}
+.qlist li span:first-child{min-width:0;overflow-wrap:anywhere}
+.quote .btn{width:100%;margin-top:16px;background:#FFFFFF;color:#120E2C}
+.quote .btn:hover{background:#EDE9FB}
+.quote .btn.ghost{background:transparent;color:var(--quote-ink);border:1px solid var(--quote-line);margin-top:8px}
+.toast{font-size:13px;color:var(--quote-ink);min-height:18px;margin-top:8px}
+.quote .small{font-size:12px;margin-top:12px}
+.quote .small b{color:var(--quote-ink);user-select:all}
+#quoteText{width:100%;margin-top:8px;background:var(--panel);color:var(--text)}
+
+.bar{display:flex;flex-wrap:wrap;gap:12px 18px;align-items:flex-end;margin-bottom:12px}
+.seg{display:inline-flex;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:3px;gap:2px}
+.seg button{border:0;background:transparent;min-height:38px;padding:0 14px;border-radius:8px;cursor:pointer;font-weight:500;white-space:nowrap}
+.seg button[aria-pressed="true"]{background:var(--panel);color:var(--accent);font-weight:600;box-shadow:0 1px 3px rgba(18,14,44,.12)}
+.chips{display:flex;gap:8px;overflow-x:auto;padding-block:4px 12px}
+.meta{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;color:var(--muted);font-size:13px;margin:4px 0 10px}
+.tbox{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--panel)}
+table{width:100%;border-collapse:collapse;min-width:640px}
+th,td{padding:10px 12px;text-align:right;border-bottom:1px solid var(--line)}
+th:first-child,td:first-child{text-align:left}
+thead th{background:var(--panel);font-size:12px;color:var(--muted);font-weight:600;white-space:nowrap}
+thead th small{display:block;font-weight:500}
+tr.cat td{background:var(--surface);color:var(--ink);font-weight:700;font-size:13px;text-align:left}
+td.role{color:var(--ink);font-weight:500}
+.rate{border:1px solid transparent;background:transparent;border-radius:8px;padding:6px 8px;cursor:pointer;min-height:36px;min-width:72px;text-align:right;color:var(--text)}
+.rate:hover{border-color:var(--accent);background:var(--accent-soft);color:var(--ink)}
+.rate .plus{opacity:0;color:var(--accent);font-weight:700;margin-right:4px}
+.rate:hover .plus,.rate:focus-visible .plus{opacity:1}
+.na{color:var(--muted)}
+.empty{padding:40px;text-align:center;color:var(--muted)}
+.notes{margin:24px 0 64px;color:var(--muted);font-size:13px}
+.notes ul{margin:6px 0 0;padding-left:18px;display:flex;flex-direction:column;gap:4px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<header class="top gut">
+  <div class="wrap">
+    <div class="intro">
+      <div class="brand"><svg width="26" height="26" viewBox="0 0 28 28" aria-hidden="true"><rect width="28" height="28" rx="7" fill="#4B2BB8"/><path d="M9 7h5.5l7 7-7 7H9l7-7z" fill="#FFFFFF"/></svg>Purplease</div>
+      <h1>Build your team, see the cost</h1>
+      <p>Pick the engineers you need, by tech stack and experience, and get weekly, monthly and full-project pricing instantly. All rates are in US dollars for clients outside India.</p>
+      <div class="stats">
+        <div class="stat"><b class="num">78</b><span>roles &amp; tech stacks</span></div>
+        <div class="stat"><b class="num">5</b><span>experience levels</span></div>
+        <div class="stat"><b class="num" id="sFrom">—</b><span>starting rate per hour</span></div>
+      </div>
+    </div>
+    <img class="heroimg" src="team-engineers.jpg" alt="Two engineers reviewing code together on a laptop">
+  </div>
+</header>
+
+<main class="gut">
+  <div class="wrap">
+    <section class="block" aria-labelledby="planTitle">
+      <div class="sechead">
+        <div><h2 id="planTitle">Team cost calculator</h2>
+        <p>Tell us about your project, add the people you need, and your estimate updates as you go. We've started you with an example team; change it to fit.</p></div>
+      </div>
+      <div class="planner">
+        <form class="form" id="planForm" novalidate>
+          <div class="card">
+            <h3>1. Your project</h3>
+            <div class="grid">
+              <div class="f"><label for="company">Company name</label><input id="company" class="input" autocomplete="organization" placeholder="e.g. Northwind Labs"><span class="err" id="companyErr"></span></div>
+              <div class="f"><label for="project">Project name</label><input id="project" class="input" placeholder="e.g. Customer portal rebuild"><span class="err" id="projectErr"></span></div>
+              <div class="f"><label for="contact">Your email <span class="opt">(optional)</span></label><input id="contact" class="input" type="email" autocomplete="email" placeholder="you@company.com"></div>
+              <div class="f"><label for="months">Project length</label>
+                <select id="months" class="input"><option value="1">1 month</option><option value="2">2 months</option><option value="3">3 months</option><option value="6">6 months</option><option value="9">9 months</option><option value="12">12 months</option><option value="18">18 months</option><option value="24">24 months</option></select></div>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>2. Your team</h3>
+            <ul class="members" id="members"></ul>
+            <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:14px">
+              <button type="button" class="btn" id="addMember">+ Add team member</button>
+              <button type="button" class="btn ghost" id="clearTeam">Remove everyone</button>
+            </div>
+            <div class="quick" role="group" aria-label="Quick add a role"></div>
+          </div>
+          <p class="note">Weekly cost = hourly rate × 40 hours × allocation. Monthly cost = hourly rate × 176 hours (22 working days) × allocation.</p>
+        </form>
+
+        <aside class="quote" aria-labelledby="quoteTitle">
+          <h3 id="quoteTitle">Your estimate</h3>
+          <div class="who" id="qWho"></div>
+          <ul class="qlist" id="qList"></ul>
+          <div class="qrow"><span>Team size</span><b class="num" id="qSize"></b></div>
+          <div class="qrow"><span>Blended rate</span><b class="num" id="qBlend"></b></div>
+          <div class="qrow"><span>Weekly cost</span><b class="num" id="qWeek"></b></div>
+          <div class="qrow" style="align-items:baseline"><span>Monthly cost</span><span class="big num" id="qMonth"></span></div>
+          <div class="qrow" style="border-bottom:0"><span id="qTotLbl">Project total</span><b class="num" id="qTotal"></b></div>
+          <button type="button" class="btn" id="copyQuote">Copy quote summary</button>
+          <button type="button" class="btn ghost" id="resetExample">Start again with the example team</button>
+          <div class="toast" id="toast" role="status" aria-live="polite"></div>
+          <p class="small">Email the summary to <b>info@purplease.com</b>. We'll confirm availability and send a formal quote within two business days. Prices exclude any local taxes.</p>
+        </aside>
+      </div>
+    </section>
+
+    <section class="block" aria-labelledby="rateTitle">
+      <div class="sechead">
+        <div><h2 id="rateTitle">Full rate card</h2>
+        <p>Hourly rates in USD. Click any rate to add that person to your team above.</p></div>
+      </div>
+      <div class="bar">
+        <div class="f"><span class="lbl" id="lDel">Where they work</span>
+          <div class="seg" role="group" aria-labelledby="lDel">
+            <button type="button" data-tdel="remote">Remote from India</button>
+            <button type="button" data-tdel="onsite">At your site</button>
+          </div>
+        </div>
+        <div class="f" style="flex:1 1 240px"><label for="q">Search roles &amp; stacks</label>
+          <input id="q" class="input" type="search" placeholder="e.g. Golang, React, AI" autocomplete="off"></div>
+      </div>
+      <div class="chips" id="chips" role="group" aria-label="Filter by category"></div>
+      <div class="meta"><span id="tblTitle"></span><span id="count"></span></div>
+      <div class="tbox"><table>
+        <thead><tr id="thead"></tr></thead>
+        <tbody id="tbody"></tbody>
+      </table></div>
+      <div class="notes"><strong>Notes</strong>
+        <ul>
+          <li>Rates are for clients outside India. Services exported from India are zero-rated for GST; any local taxes in your country are extra.</li>
+          <li>“Remote from India” engineers work from our offices with time-zone overlap. “At your site” rates cover an engineer working at your location, including travel, visa and living costs; we confirm them for your country before quoting.</li>
+          <li>“—” means we don't staff that role at that experience level.</li>
+          <li>Rates are indicative. Your final quote depends on scope, duration and team size.</li>
+        </ul>
+      </div>
+    </section>
+  </div>
+</main>
+
+<script>
+const DATA = {"stacks":[["Frontend","React.js"],["Frontend","Angular"],["Frontend","Vue.js"],["Frontend","Next.js / TypeScript"],["Frontend","HTML / CSS / JavaScript"],["Backend","Node.js (Express / NestJS)"],["Backend","Python (Django / Flask / FastAPI)"],["Backend","Java (Spring Boot)"],["Backend",".NET Core / C#"],["Backend","PHP (Laravel / CodeIgniter)"],["Backend","Go (Golang)"],["Backend","Ruby on Rails"],["Backend","Rust"],["Full Stack","MERN Stack"],["Full Stack","MEAN Stack"],["Full Stack","Python + React"],["Full Stack","Java + Angular / React"],["Full Stack",".NET + Angular / React"],["Full Stack","LAMP / PHP + Vue"],["Mobile","Flutter"],["Mobile","React Native"],["Mobile","iOS (Swift)"],["Mobile","Android (Kotlin)"],["CMS / E-commerce","WordPress / WooCommerce"],["CMS / E-commerce","Shopify"],["CMS / E-commerce","Magento / Adobe Commerce"],["CMS / E-commerce","Webflow / No-code"],["Enterprise / CRM","Salesforce Developer"],["Enterprise / CRM","Salesforce Admin / Consultant"],["Enterprise / CRM","Microsoft Dynamics 365"],["Enterprise / CRM","SAP (ABAP / Fiori)"],["Enterprise / CRM","SAP Functional (FICO / MM / SD)"],["Enterprise / CRM","ServiceNow Developer"],["Enterprise / CRM","Odoo / ERPNext"],["Enterprise / CRM","HubSpot / GoHighLevel (GHL)"],["Enterprise / CRM","Zoho Developer"],["Automation / Low-code","RPA (UiPath / Automation Anywhere)"],["Automation / Low-code","Power Platform (Power Apps / Automate)"],["Automation / Low-code","n8n / Make / Zapier"],["QA / Testing","Manual Testing"],["QA / Testing","Selenium (Java / Python)"],["QA / Testing","Cypress / Playwright"],["QA / Testing","Appium (Mobile)"],["QA / Testing","Performance (JMeter / LoadRunner)"],["QA / Testing","API Testing (Postman / RestAssured)"],["DevOps / Cloud","AWS"],["DevOps / Cloud","Microsoft Azure"],["DevOps / Cloud","Google Cloud (GCP)"],["DevOps / Cloud","Kubernetes / Docker"],["DevOps / Cloud","Terraform / IaC"],["DevOps / Cloud","Site Reliability Engineer (SRE)"],["Security","Cybersecurity / VAPT"],["Data","Data Engineer (Spark / Databricks)"],["Data","Snowflake / dbt"],["Data","ETL (Informatica / SSIS / ADF)"],["Data","Data Analyst (SQL / Excel)"],["Data","BI (Power BI / Tableau)"],["Data","Database Admin (Oracle / SQL Server)"],["AI / ML","Machine Learning (Python / TensorFlow / PyTorch)"],["AI / ML","Generative AI / LLM (LangChain, RAG, Agents)"],["AI / ML","Computer Vision"],["AI / ML","NLP Engineer"],["AI / ML","MLOps"],["Emerging","Blockchain / Web3 (Solidity)"],["Emerging","IoT / Embedded (C / C++)"],["Emerging","Game Dev (Unity / Unreal)"],["Design","UI/UX Designer (Figma)"],["Design","Graphic / Visual Designer"],["Business & Delivery","Business Analyst"],["Business & Delivery","AI Business Analyst"],["Business & Delivery","Product Owner"],["Business & Delivery","Scrum Master"],["Business & Delivery","Project Manager"],["Business & Delivery","Delivery / Program Manager"],["Leadership","Tech Lead"],["Leadership","Solution Architect"],["Leadership","Cloud Architect"],["Leadership","Data / AI Architect"]],"remote":[[18,27,37,43,48],[18,27,37,43,48],[18,27,37,43,48],[19,28,39,45,50],[15,23,31,37,41],[19,28,39,45,50],[19,28,39,45,50],[20,30,41,47,53],[19,28,39,45,50],[16,24,33,39,43],[22,32,44,52,58],[21,31,43,49,55],[23,34,46,54,60],[20,30,40,46,52],[20,30,40,46,52],[21,32,42,48,55],[21,32,42,48,55],[21,32,42,48,55],[18,27,36,41,47],[20,30,40,46,52],[20,30,40,46,52],[22,33,44,51,57],[21,32,42,48,55],[14,22,30,34,38],[16,24,33,39,43],[20,30,41,47,53],[14,22,30,34,38],[24,36,48,55,62],[22,31,42,48,55],[23,35,46,53,60],[26,39,52,60,68],[26,36,49,57,65],[24,36,48,55,62],[19,29,38,44,49],[20,28,38,44,50],[18,27,36,41,47],[21,31,43,49,55],[19,28,39,45,50],[17,26,35,41,46],[15,23,30,35,40],[18,27,37,43,48],[19,28,39,45,50],[19,28,39,45,50],[20,30,41,47,53],[17,25,33,39,44],[23,34,45,54,61],[22,32,43,51,58],[22,32,43,51,58],[23,34,45,54,61],[23,34,45,54,61],[24,35,47,56,64],[25,37,49,59,67],[23,34,45,54,61],[23,34,45,54,61],[21,30,41,48,55],[18,26,34,41,46],[20,29,39,46,52],[21,30,41,48,55],[27,40,55,63,70],[31,46,63,72,81],[28,42,58,66,74],[28,42,58,66,74],[28,42,58,66,74],[23,35,48,56,62],[20,30,41,47,53],[20,30,41,47,53],[18,26,35,40,45],[14,21,28,32,36],[20,28,38,44,50],[23,32,44,51,57],[22,31,42,48,55],[21,29,38,44,49],[22,30,40,46,52],[25,35,46,53,60],[null,38,48,54,60],[null,45,58,65,72],[null,47,61,68,76],[null,50,64,72,79]],"onsite":[[45,68,93,108,120],[45,68,93,108,120],[45,68,93,108,120],[48,70,98,113,125],[38,58,78,93,103],[48,70,98,113,125],[48,70,98,113,125],[50,75,103,118,133],[48,70,98,113,125],[40,60,83,98,108],[55,80,110,130,145],[53,78,108,123,138],[58,85,115,135,150],[50,75,100,115,130],[50,75,100,115,130],[53,80,105,120,138],[53,80,105,120,138],[53,80,105,120,138],[45,68,90,103,118],[50,75,100,115,130],[50,75,100,115,130],[55,83,110,128,143],[53,80,105,120,138],[35,55,75,85,95],[40,60,83,98,108],[50,75,103,118,133],[35,55,75,85,95],[60,90,120,138,155],[55,78,105,120,138],[58,88,115,133,150],[65,98,130,150,170],[65,90,123,143,163],[60,90,120,138,155],[48,73,95,110,123],[50,70,95,110,125],[45,68,90,103,118],[53,78,108,123,138],[48,70,98,113,125],[43,65,88,103,115],[38,58,75,88,100],[45,68,93,108,120],[48,70,98,113,125],[48,70,98,113,125],[50,75,103,118,133],[43,63,83,98,110],[58,85,113,135,153],[55,80,108,128,145],[55,80,108,128,145],[58,85,113,135,153],[58,85,113,135,153],[60,88,118,140,160],[63,93,123,148,168],[58,85,113,135,153],[58,85,113,135,153],[53,75,103,120,138],[45,65,85,103,115],[50,73,98,115,130],[53,75,103,120,138],[68,100,138,158,175],[78,115,158,180,203],[70,105,145,165,185],[70,105,145,165,185],[70,105,145,165,185],[58,88,120,140,155],[50,75,103,118,133],[50,75,103,118,133],[45,65,88,100,113],[35,53,70,80,90],[50,70,95,110,125],[58,80,110,128,143],[55,78,105,120,138],[53,73,95,110,123],[55,75,100,115,130],[63,88,115,133,150],[null,95,120,135,150],[null,113,145,163,180],[null,118,153,170,190],[null,125,160,180,198]]};
+const LEVELS = ['1–3 yrs','3–5 yrs','5–8 yrs','8–10 yrs','10+ yrs'];
+const LEVEL_NAMES = ['Junior','Mid-level','Senior','Lead','Principal'];
+const HOURS_WEEK = 40, HOURS_MONTH = 176;
+const ALLOC = [[1,'Full-time'],[0.75,'75%'],[0.5,'Half-time'],[0.25,'25%']];
+const cats = [...new Set(DATA.stacks.map(s => s[0]))];
+const idx = name => DATA.stacks.findIndex(s => s[1] === name);
+const EXAMPLE = [
+  { i: idx('Go (Golang)'), l: 2, n: 1, a: 1, d: 'remote' },
+  { i: idx('React.js'), l: 1, n: 2, a: 1, d: 'remote' },
+  { i: idx('Cypress / Playwright'), l: 1, n: 1, a: 1, d: 'remote' },
+  { i: idx('Project Manager'), l: 2, n: 1, a: 0.5, d: 'remote' }
+];
+const QUICK = ['Go (Golang)','React.js','Node.js (Express / NestJS)','Python (Django / Flask / FastAPI)','Flutter','Kubernetes / Docker','Generative AI / LLM (LangChain, RAG, Agents)','Cypress / Playwright','UI/UX Designer (Figma)','Project Manager'];
+const SHORT = { 'Go (Golang)':'Go developer','React.js':'React developer','Node.js (Express / NestJS)':'Node.js developer','Python (Django / Flask / FastAPI)':'Python developer','Flutter':'Flutter developer','Kubernetes / Docker':'DevOps engineer','Generative AI / LLM (LangChain, RAG, Agents)':'GenAI / LLM engineer','Cypress / Playwright':'QA automation','UI/UX Designer (Figma)':'UI/UX designer','Project Manager':'Project manager' };
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' }[c]));
+
+let st = { company:'', project:'', contact:'', months:6, team: EXAMPLE.map(m => ({ ...m })), tdel:'remote', q:'', cat:'All' };
+try { const s = JSON.parse(localStorage.getItem('pl-team-calc') || 'null'); if (s && Array.isArray(s.team)) st = Object.assign(st, s, { q:'' }); } catch (e) {}
+function save(){ try { localStorage.setItem('pl-team-calc', JSON.stringify(st)); } catch (e) {} }
+
+const table = d => d === 'onsite' ? DATA.onsite : DATA.remote;
+const rate = (i, l, d) => table(d)[i][l];
+const usd = (n, dp) => '$' + n.toLocaleString('en-US', { minimumFractionDigits: dp ?? 0, maximumFractionDigits: dp ?? 0 });
+const money = n => usd(Math.round(n));
+function firstLevel(i, d){ const l = table(d)[i].findIndex(v => v != null); return l < 0 ? 0 : l; }
+function fixLevel(m){ if (rate(m.i, m.l, m.d) == null) m.l = firstLevel(m.i, m.d); }
+const label = i => SHORT[DATA.stacks[i][1]] || DATA.stacks[i][1];
+
+const roleOptions = sel => cats.map(c => `<optgroup label="${esc(c)}">` +
+  DATA.stacks.map((s, i) => s[0] === c ? `<option value="${i}"${i === sel ? ' selected' : ''}>${esc(s[1])}</option>` : '').join('') + '</optgroup>').join('');
+
+function memberCost(m){
+  const r = rate(m.i, m.l, m.d); if (r == null) return null;
+  return { r, week: r * HOURS_WEEK * m.a * m.n, month: r * HOURS_MONTH * m.a * m.n, fte: m.a * m.n };
+}
+
+function renderMembers(){
+  const ul = $('#members');
+  if (!st.team.length) { ul.innerHTML = '<li class="note" style="padding:8px 0">No one on your team yet. Add a team member or use a quick-add button below.</li>'; return; }
+  ul.innerHTML = st.team.map((m, k) => {
+    const c = memberCost(m);
+    const lv = LEVELS.map((L, l) => { const off = rate(m.i, l, m.d) == null; return `<option value="${l}"${l === m.l ? ' selected' : ''}${off ? ' disabled' : ''}>${L} · ${LEVEL_NAMES[l]}${off ? ' (not offered)' : ''}</option>`; }).join('');
+    return `<li class="member">
+      <div class="f role"><label for="r${k}">Role / tech stack</label><select id="r${k}" class="input" data-k="${k}" data-f="i">${roleOptions(m.i)}</select></div>
+      <div class="f"><label for="l${k}">Experience</label><select id="l${k}" class="input" data-k="${k}" data-f="l">${lv}</select></div>
+      <div class="f"><span class="lbl" id="nq${k}">How many</span><div class="qty" role="group" aria-labelledby="nq${k}"><button type="button" data-dec="${k}" aria-label="One fewer">−</button><input class="num" id="n${k}" data-k="${k}" data-f="n" inputmode="numeric" value="${m.n}" aria-labelledby="nq${k}"><button type="button" data-inc="${k}" aria-label="One more">+</button></div></div>
+      <div class="f"><label for="a${k}">Allocation</label><select id="a${k}" class="input" data-k="${k}" data-f="a">${ALLOC.map(([v, t]) => `<option value="${v}"${v === m.a ? ' selected' : ''}>${t}</option>`).join('')}</select></div>
+      <div class="f"><label for="d${k}">Works</label><select id="d${k}" class="input" data-k="${k}" data-f="d"><option value="remote"${m.d === 'remote' ? ' selected' : ''}>Remote from India</option><option value="onsite"${m.d === 'onsite' ? ' selected' : ''}>At your site</option></select></div>
+      <div class="cost num"><span>${c ? usd(c.r) + '/hr each' : 'Not offered at this level'}</span><span>Weekly <b>${c ? money(c.week) : '—'}</b></span><span>Monthly <b>${c ? money(c.month) : '—'}</b></span><button type="button" class="rm" data-rm="${k}">Remove</button></div>
+    </li>`;
+  }).join('');
+}
+
+function totals(){
+  let week = 0, month = 0, fte = 0, people = 0;
+  st.team.forEach(m => { const c = memberCost(m); if (c) { week += c.week; month += c.month; fte += c.fte; people += m.n; } });
+  return { week, month, fte, people, blend: fte ? month / (fte * HOURS_MONTH) : 0, total: month * st.months };
+}
+
+function renderQuote(){
+  const t = totals(), mo = st.months === 1 ? 'month' : 'months';
+  $('#qWho').innerHTML = `${esc(st.company || 'Your company')}<span>${esc(st.project || 'Your project')} · ${st.months} ${mo}</span>`;
+  $('#qList').innerHTML = st.team.map(m => {
+    const c = memberCost(m);
+    const extra = (m.a === 1 ? '' : ', ' + ALLOC.find(x => x[0] === m.a)[1].toLowerCase()) + (m.d === 'onsite' ? ', on-site' : '');
+    return `<li><span>${m.n} × ${esc(label(m.i))} (${LEVEL_NAMES[m.l]}${extra})</span><span class="num">${c ? money(c.month) + '/mo' : '—'}</span></li>`;
+  }).join('');
+  $('#qSize').textContent = `${t.people} ${t.people === 1 ? 'person' : 'people'} · ${+t.fte.toFixed(2)} full-time`;
+  $('#qBlend').textContent = t.fte ? usd(t.blend, 2) + '/hr' : '—';
+  $('#qWeek').textContent = money(t.week);
+  $('#qMonth').textContent = money(t.month);
+  $('#qTotLbl').textContent = `Project total (${st.months} ${mo})`;
+  $('#qTotal').textContent = money(t.total);
+  $('#copyQuote').disabled = !st.team.length;
+}
+
+function renderForm(){
+  $('#company').value = st.company; $('#project').value = st.project; $('#contact').value = st.contact; $('#months').value = String(st.months);
+  document.querySelector('.quick').innerHTML = '<span class="lbl" style="align-self:center">Quick add:</span>' + QUICK.map(n => `<button type="button" class="chip" data-quick="${idx(n)}">+ ${esc(SHORT[n])}</button>`).join('');
+}
+
+function renderTable(){
+  const q = st.q.trim().toLowerCase(), tab = table(st.tdel);
+  document.querySelectorAll('[data-tdel]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.tdel === st.tdel)));
+  $('#chips').innerHTML = ['All', ...cats].map(c => `<button type="button" class="chip" data-cat="${esc(c)}" aria-pressed="${c === st.cat}">${esc(c)}</button>`).join('');
+  $('#thead').innerHTML = '<th scope="col">Role / tech stack</th>' + LEVELS.map((l, i) => `<th scope="col">${l}<small>${LEVEL_NAMES[i]}</small></th>`).join('');
+  let html = '', shown = 0, last = null;
+  DATA.stacks.forEach(([cat, name], i) => {
+    if (st.cat !== 'All' && cat !== st.cat) return;
+    if (q && !(name.toLowerCase().includes(q) || cat.toLowerCase().includes(q))) return;
+    if (cat !== last) { html += `<tr class="cat"><td colspan="6">${esc(cat)}</td></tr>`; last = cat; }
+    shown++;
+    html += `<tr><td class="role">${esc(name)}</td>` + tab[i].map((v, l) => v == null
+      ? '<td><span class="na" title="Not offered at this experience level">—</span></td>'
+      : `<td><button type="button" class="rate num" data-ai="${i}" data-al="${l}" aria-label="Add ${esc(name)}, ${LEVELS[l]}, ${usd(v)} per hour, to your team"><span class="plus" aria-hidden="true">+</span>${usd(v)}</button></td>`).join('') + '</tr>';
+  });
+  $('#tbody').innerHTML = shown ? html : `<tr><td colspan="6" class="empty">No roles match “${esc(st.q)}”. Try another stack or pick “All”.</td></tr>`;
+  $('#tblTitle').textContent = st.tdel === 'onsite' ? 'USD per hour · engineer at your site' : 'USD per hour · remote from India';
+  $('#count').textContent = `${shown} of ${DATA.stacks.length} roles`;
+}
+
+function addMember(i, l, d){
+  const m = { i, l: l ?? 0, n: 1, a: 1, d: d || 'remote' }; fixLevel(m);
+  const ex = st.team.find(x => x.i === m.i && x.l === m.l && x.d === m.d && x.a === 1);
+  if (ex) ex.n++; else st.team.push(m);
+  toast(`Added ${label(i)} (${LEVELS[m.l]}).`);
+}
+
+function render(){ renderMembers(); renderQuote(); save(); }
+
+document.addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return; const d = b.dataset;
+  if (d.inc != null) st.team[+d.inc].n = Math.min(99, st.team[+d.inc].n + 1);
+  else if (d.dec != null) { const m = st.team[+d.dec]; m.n--; if (m.n < 1) st.team.splice(+d.dec, 1); }
+  else if (d.rm != null) st.team.splice(+d.rm, 1);
+  else if (d.quick != null) addMember(+d.quick, 1);
+  else if (d.ai != null) { addMember(+d.ai, +d.al, st.tdel); $('#planTitle').scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' }); }
+  else if (d.tdel) { st.tdel = d.tdel; renderTable(); save(); return; }
+  else if (d.cat) { st.cat = d.cat; renderTable(); save(); return; }
+  else if (b.id === 'addMember') addMember(idx('Go (Golang)'), 1);
+  else if (b.id === 'clearTeam') st.team = [];
+  else if (b.id === 'resetExample') { st.team = EXAMPLE.map(m => ({ ...m })); toast('Example team restored.'); }
+  else if (b.id === 'copyQuote') { copyQuote(); return; }
+  else return;
+  render();
+});
+$('#members').addEventListener('change', e => {
+  const el = e.target, k = +el.dataset.k, f = el.dataset.f; if (!f) return;
+  const m = st.team[k];
+  if (f === 'i') { m.i = +el.value; fixLevel(m); }
+  else if (f === 'l') m.l = +el.value;
+  else if (f === 'a') m.a = +el.value;
+  else if (f === 'd') { m.d = el.value; fixLevel(m); }
+  else if (f === 'n') { const v = parseInt(el.value, 10); m.n = v > 0 ? Math.min(99, v) : 1; }
+  render();
+});
+['company','project','contact'].forEach(id => $('#' + id).addEventListener('input', e => {
+  st[id] = e.target.value.slice(0, 120); e.target.removeAttribute('aria-invalid');
+  const err = document.getElementById(id + 'Err'); if (err) err.textContent = '';
+  renderQuote(); save();
+}));
+$('#months').addEventListener('change', e => { st.months = +e.target.value; renderQuote(); save(); });
+$('#q').addEventListener('input', e => { st.q = e.target.value; renderTable(); });
+$('#planForm').addEventListener('submit', e => e.preventDefault());
+
+let tt;
+function toast(msg){ $('#toast').textContent = msg; clearTimeout(tt); tt = setTimeout(() => $('#toast').textContent = '', 3000); }
+
+function quoteText(){
+  const t = totals(), L = [], mo = st.months === 1 ? 'month' : 'months';
+  L.push('Team estimate from purplease.com', `Company: ${st.company}`, `Project: ${st.project}`);
+  if (st.contact) L.push(`Contact: ${st.contact}`);
+  L.push(`Project length: ${st.months} ${mo}`, '', 'Team:');
+  st.team.forEach(m => {
+    const c = memberCost(m), name = DATA.stacks[m.i][1];
+    L.push(`- ${m.n} × ${name}, ${LEVELS[m.l]}, ${ALLOC.find(x => x[0] === m.a)[1]}, ${m.d === 'onsite' ? 'at client site' : 'remote from India'}: ${c ? usd(c.r) + '/hr, ' + money(c.week) + '/week, ' + money(c.month) + '/month' : 'not offered at this level'}`);
+  });
+  L.push('', `Weekly cost: ${money(t.week)}`, `Monthly cost: ${money(t.month)}`, `Project total (${st.months} ${mo}): ${money(t.total)}`, '', 'Rates in USD, excluding local taxes. Indicative until confirmed by Purplease.');
+  return L.join('\n');
+}
+async function copyQuote(){
+  let ok = true;
+  [['company','Enter your company name.'],['project','Enter a project name.']].forEach(([id, msg]) => {
+    if (!st[id].trim()) { ok = false; $('#' + id).setAttribute('aria-invalid', 'true'); document.getElementById(id + 'Err').textContent = msg; }
+  });
+  if (!ok) { toast('Add your company and project name first.'); (st.company.trim() ? $('#project') : $('#company')).focus(); return; }
+  const text = quoteText();
+  try { await navigator.clipboard.writeText(text); toast('Quote summary copied. Paste it into an email to info@purplease.com.'); }
+  catch (e) {
+    let ta = document.getElementById('quoteText');
+    if (!ta) { ta = document.createElement('textarea'); ta.id = 'quoteText'; ta.className = 'input'; ta.rows = 10; ta.setAttribute('aria-label', 'Quote summary'); $('#toast').after(ta); }
+    ta.value = text; ta.select(); toast('Select the text below and copy it.');
+  }
+}
+
+$('#sFrom').textContent = usd(Math.min(...DATA.remote.flat().filter(v => v != null)));
+renderForm(); renderTable(); render();
+</script>
+
+</body>
+</html>
